@@ -131,7 +131,7 @@ python agent.py
 
 Below is the screenshot attached with the results
 
-> After 150 games, the model reached a High Score of 120, with a Mean Score of 20.46
+> After 150 games, the model reached a High Score of 120, with a Mean Score of 20.46.
 
 <br/>
     <div>
@@ -139,3 +139,7 @@ Below is the screenshot attached with the results
         <img src="./img/results.png"><br/>
     <div>
 <br/>
+
+## `Inferences/Further Actions`
+
+> Improve the Deep Q Model so that the Snake doesn't eat itself and improve the accuracy so that our Model learns faster.
