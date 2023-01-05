@@ -121,3 +121,21 @@ pip3 install torch torchvision torchaudio --extra-index-url https://download.pyt
 ```
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
 ```
+
+## `Run the below command to execute the Project`
+```
+python agent.py
+```
+
+## `Outcome/Results`
+
+Below is the screenshot attached with the results
+
+> After 150 games, the model reached a High Score of 120, with a Mean Score of 20.46
+
+<br/>
+    <div>
+        <h2 style="text-align:center">PyGame with Plotted Scores</h2>
+        <img src="./img/results.png"><br/>
+    <div>
+<br/>

@@ -32,12 +32,12 @@ BLUE2 = (0, 100, 255)
 BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
-SPEED = 20
+SPEED = 100
 
 # Here we Initialize class SnakeGame to code the required things for the game
 class SnakeGameAI:
     
-    def __init__(self, w=640, h=480):
+    def __init__(self, w=1080, h=800):
         self.w = w
         self.h = h
         # init display
@@ -48,14 +48,14 @@ class SnakeGameAI:
         
 
     def reset(self):
-         # init game state
+        # init game state
         self.direction = Direction.RIGHT
-        
+
         self.head = Point(self.w/2, self.h/2)
-        self.snake = [self.head, 
+        self.snake = [self.head,
                       Point(self.head.x-BLOCK_SIZE, self.head.y),
                       Point(self.head.x-(2*BLOCK_SIZE), self.head.y)]
-        
+
         self.score = 0
         self.food = None
         self._place_food()
@@ -63,7 +63,7 @@ class SnakeGameAI:
 
         
     def _place_food(self):
-        x = random.randint(0, (self.w-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE 
+        x = random.randint(0, (self.w-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE
         y = random.randint(0, (self.h-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE
         self.food = Point(x, y)
         if self.food in self.snake:
@@ -76,7 +76,7 @@ class SnakeGameAI:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-                 
+
         # 2. move
         self._move(action) # update the head
         self.snake.insert(0, self.head)
@@ -84,7 +84,7 @@ class SnakeGameAI:
         # 3. check if game over
         reward = 0
         game_over = False
-        if self.is_collision() or self.frame_iteration > 100*len(self.snake) :
+        if self.is_collision() or self.frame_iteration > 100*len(self.snake):
             game_over = True
             reward = -10
             return reward, game_over, self.score
@@ -100,13 +100,13 @@ class SnakeGameAI:
         # 5. update ui and clock
         self._update_ui()
         self.clock.tick(SPEED)
-        # 6. return reward, game over and score
+        # 6. return game over and score
         return reward, game_over, self.score
     
     # Make is_collision() public by removing the starting underscore (_)
-    def is_collision(self, pt = None):
+    def is_collision(self, pt=None):
         if pt is None:
-            pt = pt
+            pt = self.head
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:
             return True
@@ -118,19 +118,19 @@ class SnakeGameAI:
         
     def _update_ui(self):
         self.display.fill(BLACK)
-        
+
         for pt in self.snake:
             pygame.draw.rect(self.display, BLUE1, pygame.Rect(pt.x, pt.y, BLOCK_SIZE, BLOCK_SIZE))
             pygame.draw.rect(self.display, BLUE2, pygame.Rect(pt.x+4, pt.y+4, 12, 12))
-            
+
         pygame.draw.rect(self.display, RED, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
-        
+
         text = font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
         
     def _move(self, action):
-        # Defining the directions based on action
+        # Defining the directions based on action [straight, right, left]
 
         clock_wise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
         idx = clock_wise.index(self.direction)
@@ -139,7 +139,7 @@ class SnakeGameAI:
             new_dir = clock_wise[idx] # Meaning no change in direction
         elif np.array_equal(action, [0, 1, 0]):
             next_idx = (idx + 1) % 4
-            new_dir = clock_wise[next_idx] # Meaning change the direction to right turn (R -> D -> L -> U)
+            new_dir = clock_wise[next_idx]  # Meaning change the direction to right turn (R -> D -> L -> U)
         else: # Meaning [0,0,1]
             next_idx = (idx - 1) % 4
             new_dir = clock_wise[next_idx] # Meaning change the direction to left turn (R -> U -> L -> D)
@@ -156,5 +156,5 @@ class SnakeGameAI:
             y += BLOCK_SIZE
         elif self.direction == Direction.UP:
             y -= BLOCK_SIZE
-            
+
         self.head = Point(x, y)
